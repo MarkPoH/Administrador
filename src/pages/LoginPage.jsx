@@ -13,19 +13,16 @@ export default function LoginPage({ onLoginSuccess }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setError('');
-
-    // Credenciales de ejemplo
-    const correctEmail = 'admin@123.com';
-    const correctPassword = '123abc12';
-
-    if (email === correctEmail && password === correctPassword) {
+    if (email  && password  ) {
       console.log('Inicio de sesión exitoso');
       onLoginSuccess(); // Llama a la función de éxito de login
-    } else {
+    } 
+    else {
       setError('Correo o contraseña incorrectos.');
     }
   };
+    const changeInput = (e) => {setEmail(e.target.value)
+    };
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-white text-gray-900">

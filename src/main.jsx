@@ -1,10 +1,10 @@
+import './index.css'; // Importa tus estilos globales de Tailwind
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App.jsx';
-import './index.css'; // Importa tus estilos globales de Tailwind
+import AppRouter from './router';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+    <AppRouter />
+  </React.StrictMode>
 );
