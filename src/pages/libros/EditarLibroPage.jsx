@@ -13,7 +13,6 @@ export default function EditarLibroPage() {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState('');
   const [editModalOpen, setEditModalOpen] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState('');
   const [editSuccess, setEditSuccess] = useState('');
 
   useEffect(() => {
