@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
@@ -6,26 +6,44 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { Upload } from 'lucide-react';
+import { listarAutores, listarCategorias, crearLibro } from '@/api/index';
 
 export default function CrearLibroPage() {
   const [coverImageUrl, setCoverImageUrl] = useState('');
   const [coverPreviewUrl, setCoverPreviewUrl] = useState('');
   const [pdfUrl, setPdfUrl] = useState('');
   const [pdfFileName, setPdfFileName] = useState('');
+  const [authors, setAuthors] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [selectedAuthor, setSelectedAuthor] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const [title, setTitle] = useState('');
+  const [isbn, setIsbn] = useState('');
+  const [description, setDescription] = useState('');
+  const [price, setPrice] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
 
-  const authors = [
-    { id: '1', name: 'Khaled Hoseinis' },
-    { id: '2', name: 'Miguel de Cervantes De loyola' },
-    { id: '3', name: 'Leo Tolstoys' },
-    { id: '4', name: 'Victor Hugo del grabiel' },
-  ];
-
-  const categories = [
-    { id: '1', name: 'Tragedia' },
-    { id: '2', name: 'Drama' },
-    { id: '3', name: 'Fantasía' },
-    { id: '4', name: 'Ciencia Ficción' },
-  ];
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const [autoresData, categoriasData] = await Promise.all([
+          listarAutores(),
+          listarCategorias()
+        ]);
+        setAuthors(Array.isArray(autoresData) ? autoresData : autoresData.autores || []);
+        setCategories(Array.isArray(categoriasData) ? categoriasData : categoriasData.categorias || []);
+        setError('');
+      } catch (err) {
+        setError('Error al cargar autores o categorías.');
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
 
   const handleCoverImageUrlChange = (e) => {
     const url = e.target.value;
@@ -55,15 +73,44 @@ export default function CrearLibroPage() {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Lógica para guardar el libro
-    alert('Libro guardado exitosamente!');
-    // Resetear formulario
+    setLoading(true);
+    setError('');
+    setSuccess('');
+    try {
+      const libroData = {
+        titulo: title,
+        isbn,
+        autor_id: selectedAuthor,
+        categoria_id: selectedCategory,
+        descripcion: description,
+        precio: price,
+        imagen_portada: coverImageUrl,
+        archivo_pdf: pdfUrl
+      };
+      await crearLibro(libroData);
+      setSuccess('Libro guardado exitosamente!');
+      // Resetear formulario
+      setTitle('');
+      setIsbn('');
+      setSelectedAuthor('');
+      setSelectedCategory('');
+      setDescription('');
+      setPrice('');
+      setCoverImageUrl('');
+      setCoverPreviewUrl('');
+      setPdfUrl('');
+      setPdfFileName('');
+    } catch (err) {
+      setError('Error al guardar el libro.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 bg-white"> {/* Fondo blanco */}
+    <div className="container mx-auto px-4 py-8 bg-white">
       <h1 className="text-3xl font-bold mb-6 text-masala-900 text-center">Crear Nuevo Libro</h1>
       <form onSubmit={handleSubmit} className="space-y-8 max-w-3xl mx-auto">
         {/* Sección Portada */}
@@ -110,29 +157,29 @@ export default function CrearLibroPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="title" className="text-masala-700 dark:text-masala-300">Título</Label>
-                <Input id="title" type="text" placeholder="Título del libro" required className="mt-1 block w-full border-masala-300 dark:border-masala-700 bg-masala-100 dark:bg-masala-800 text-masala-950 dark:text-masala-50" />
+                <Input id="title" type="text" placeholder="Título del libro" required value={title} onChange={e => setTitle(e.target.value)} className="mt-1 block w-full border-masala-300 dark:border-masala-700 bg-masala-100 dark:bg-masala-800 text-masala-950 dark:text-masala-50" />
               </div>
               <div>
                 <Label htmlFor="isbn" className="text-masala-700 dark:text-masala-300">ISBN</Label>
-                <Input id="isbn" type="text" placeholder="ISBN" className="mt-1 block w-full border-masala-300 dark:border-masala-700 bg-masala-100 dark:bg-masala-800 text-masala-950 dark:text-masala-50" />
+                <Input id="isbn" type="text" placeholder="ISBN" value={isbn} onChange={e => setIsbn(e.target.value)} className="mt-1 block w-full border-masala-300 dark:border-masala-700 bg-masala-100 dark:bg-masala-800 text-masala-950 dark:text-masala-50" />
               </div>
             </div>
             <div>
               <Label htmlFor="author" className="text-masala-700 dark:text-masala-300">Autor</Label>
-              <Select>
+              <Select value={selectedAuthor} onValueChange={setSelectedAuthor}>
                 <SelectTrigger id="author" className="mt-1 block w-full border-masala-300 dark:border-masala-700 bg-masala-100 dark:bg-masala-800 text-masala-950 dark:text-masala-50">
                   <SelectValue placeholder="Seleccione un autor" />
                 </SelectTrigger>
                 <SelectContent>
                   {authors.map(author => (
-                    <SelectItem key={author.id} value={author.id}>{author.name}</SelectItem>
+                    <SelectItem key={author.id} value={author.id}>{author.nombre || author.name}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </div>
             <div>
               <Label htmlFor="description" className="text-masala-700 dark:text-masala-300">Descripción</Label>
-              <Textarea id="description" placeholder="Descripción del libro" rows={4} className="mt-1 block w-full border-masala-300 dark:border-masala-700 bg-masala-100 dark:bg-masala-800 text-masala-950 dark:text-masala-50" />
+              <Textarea id="description" placeholder="Descripción del libro" rows={4} value={description} onChange={e => setDescription(e.target.value)} className="mt-1 block w-full border-masala-300 dark:border-masala-700 bg-masala-100 dark:bg-masala-800 text-masala-950 dark:text-masala-50" />
             </div>
           </CardContent>
         </Card>
@@ -144,20 +191,20 @@ export default function CrearLibroPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="category" className="text-masala-700 dark:text-masala-300">Categoría</Label>
-                <Select>
+                <Select value={selectedCategory} onValueChange={setSelectedCategory}>
                   <SelectTrigger id="category" className="mt-1 block w-full border-masala-300 dark:border-masala-700 bg-masala-100 dark:bg-masala-800 text-masala-950 dark:text-masala-50">
                     <SelectValue placeholder="Seleccione una categoría" />
                   </SelectTrigger>
                   <SelectContent>
                     {categories.map(category => (
-                      <SelectItem key={category.id} value={category.id}>{category.name}</SelectItem>
+                      <SelectItem key={category.id} value={category.id}>{category.nombre || category.name}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
               </div>
               <div>
                 <Label htmlFor="price" className="text-masala-700 dark:text-masala-300">Precio (S/)</Label>
-                <Input id="price" type="number" step="0.01" placeholder="0.00" required className="mt-1 block w-full border-masala-300 dark:border-masala-700 bg-masala-100 dark:bg-masala-800 text-masala-950 dark:text-masala-50" />
+                <Input id="price" type="number" step="0.01" placeholder="0.00" required value={price} onChange={e => setPrice(e.target.value)} className="mt-1 block w-full border-masala-300 dark:border-masala-700 bg-masala-100 dark:bg-masala-800 text-masala-950 dark:text-masala-50" />
               </div>
             </div>
           </CardContent>
@@ -186,11 +233,14 @@ export default function CrearLibroPage() {
           </CardContent>
         </Card>
 
+        {error && <div className="text-red-600 text-center">{error}</div>}
+        {success && <div className="text-green-600 text-center">{success}</div>}
         <Button
           type="submit"
           className="w-full bg-masala-900 text-white hover:bg-masala-800 dark:bg-masala-700 dark:hover:bg-masala-600 py-3 text-lg font-semibold"
+          disabled={loading}
         >
-          GUARDAR LIBRO
+          {loading ? 'Guardando...' : 'GUARDAR LIBRO'}
         </Button>
       </form>
     </div>

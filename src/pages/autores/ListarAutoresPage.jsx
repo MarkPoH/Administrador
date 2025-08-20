@@ -1,42 +1,52 @@
-import React from 'react';
-import { Card, CardContent } from '@/components/ui/card';
+import React, { useEffect, useState } from 'react';
+import { listarAutores } from '@/api/index';
 
 export default function ListarAutoresPage() {
-  // Datos de ejemplo para los autores
-  const authors = [
-    { name: 'Khaled Hoseinis', image: '/placeholder.svg?height=100&width=100' },
-    { name: 'Miguel de Cervantes De loyola', image: '/placeholder.svg?height=100&width=100' },
-    { name: 'Joshep', image: '/placeholder.svg?height=100&width=100' },
-    { name: 'Charles Dicke', image: '/placeholder.svg?height=100&width=100' },
-    { name: 'Victor Hugo del grabiel', image: '/placeholder.svg?height=100&width=100' },
-    { name: 'Leo Tolstoys', image: '/placeholder.svg?height=100&width=100' },
-    { name: 'Thomas Hardys', image: '/placeholder.svg?height=100&width=100' },
-    { name: 'Jane Austen del huerta jhose', image: '/placeholder.svg?height=100&width=100' },
-    { name: 'Denis Huiman', image: '/placeholder.svg?height=100&width=100' },
-    { name: 'Fyodor D', image: '/placeholder.svg?height=100&width=100' },
-    { name: 'Julio Ramonde', image: '/placeholder.svg?height=100&width=100' },
-    { name: 'Habran Valdelo', image: '/placeholder.svg?height=100&width=100' },
-  ];
+  const [autores, setAutores] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    const fetchAutores = async () => {
+      setLoading(true);
+      try {
+        const data = await listarAutores();
+        setAutores(Array.isArray(data) ? data : data.autores || []);
+        setError('');
+      } catch (err) {
+        setError('Error al cargar autores.');
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchAutores();
+  }, []);
 
   return (
-    <div className="container mx-auto px-4 py-8 bg-white"> {/* Fondo blanco */}
-      <h1 className="text-2xl font-bold mb-6 text-center">Lista de Autores</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {authors.map((author, index) => (
-          <Card key={index} className="flex flex-col items-center p-4 text-center shadow-md hover:shadow-lg transition-shadow">
-            <CardContent className="flex flex-col items-center p-0">
-              <img
-                src={author.image || "/placeholder.svg"}
-                alt={`Foto de ${author.name}`}
-                width={100}
-                height={100}
-                className="rounded-full object-cover mb-4 aspect-square"
-              />
-              <p className="text-lg font-medium">{author.name}</p>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+    <div className="container mx-auto px-4 py-8">
+      <h1 className="text-3xl font-bold mb-6 text-masala-900 text-center">Lista de Autores</h1>
+      {loading ? (
+        <div className="text-center text-masala-600">Cargando autores...</div>
+      ) : error ? (
+        <div className="text-center text-red-600">{error}</div>
+      ) : (
+        <table className="min-w-full bg-white border border-masala-300 rounded-lg shadow-md">
+          <thead>
+            <tr>
+              <th className="py-2 px-4 border-b text-left">ID</th>
+              <th className="py-2 px-4 border-b text-left">Nombre</th>
+            </tr>
+          </thead>
+          <tbody>
+            {autores.map((autor) => (
+              <tr key={autor.id} className="hover:bg-masala-100">
+                <td className="py-2 px-4 border-b">{autor.id}</td>
+                <td className="py-2 px-4 border-b">{autor.nombre || autor.name}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import LoginPage from './pages/LoginPage.jsx';
-import Sidebar from './components/Sidebar.jsx';
+import Layout from './components/Layout.jsx';
 import DashboardAdminPage from './pages/DashboardAdminPage.jsx';
 import ListarAutoresPage from './pages/autores/ListarAutoresPage.jsx';
 import RegistrarAutorPage from './pages/autores/RegistrarAutorPage.jsx';
@@ -32,38 +32,35 @@ function App() {
       case '/login':
         return <LoginPage onLoginSuccess={handleLoginSuccess} />;
       case '/dashboard-admin':
-        return <DashboardAdminPage />;
+        return <Layout setCurrentPage={setCurrentPage} currentPage={currentPage}><DashboardAdminPage /></Layout>;
       case '/autores/listar':
-        return <ListarAutoresPage />;
+        return <Layout setCurrentPage={setCurrentPage} currentPage={currentPage}><ListarAutoresPage /></Layout>;
       case '/autores/registrar':
-        return <RegistrarAutorPage />;
+        return <Layout setCurrentPage={setCurrentPage} currentPage={currentPage}><RegistrarAutorPage /></Layout>;
       case '/autores/editar':
-        return <EditarAutorPage />;
+        return <Layout setCurrentPage={setCurrentPage} currentPage={currentPage}><EditarAutorPage setCurrentPage={setCurrentPage} currentPage={currentPage} /></Layout>;
       case '/categorias/listar':
-        return <ListarCategoriasPage />;
+        return <Layout setCurrentPage={setCurrentPage} currentPage={currentPage}><ListarCategoriasPage /></Layout>;
       case '/categorias/crear':
-        return <CrearCategoriaPage />;
+        return <Layout setCurrentPage={setCurrentPage} currentPage={currentPage}><CrearCategoriaPage /></Layout>;
       case '/categorias/editar':
-        return <EditarCategoriaPage />;
+        return <Layout setCurrentPage={setCurrentPage} currentPage={currentPage}><EditarCategoriaPage /></Layout>;
       case '/libros/listar':
-        return <ListarLibrosPage />;
+        return <Layout setCurrentPage={setCurrentPage} currentPage={currentPage}><ListarLibrosPage /></Layout>;
       case '/libros/crear':
-        return <CrearLibroPage />;
+        return <Layout setCurrentPage={setCurrentPage} currentPage={currentPage}><CrearLibroPage /></Layout>;
       case '/libros/editar':
-        return <EditarLibroPage />;
+        return <Layout setCurrentPage={setCurrentPage} currentPage={currentPage}><EditarLibroPage /></Layout>;
       case '/libros/eliminar':
-        return <EliminarLibroPage />;
+        return <Layout setCurrentPage={setCurrentPage} currentPage={currentPage}><EliminarLibroPage /></Layout>;
       default:
-        return <DashboardAdminPage />; // Página por defecto
+        return <Layout setCurrentPage={setCurrentPage} currentPage={currentPage}><DashboardAdminPage /></Layout>;
     }
   };
 
   return (
-    <div className="flex min-h-screen bg-white"> {/* Fondo blanco para toda la aplicación */}
-      {isLoggedIn && <Sidebar setCurrentPage={setCurrentPage} currentPage={currentPage} />}
-      <main className={`flex-1 ${isLoggedIn ? 'p-6 md:p-8 lg:p-10' : ''}`}>
-        {renderPage()}
-      </main>
+    <div className="min-h-screen bg-gray-50">
+      {renderPage()}
     </div>
   );
 }

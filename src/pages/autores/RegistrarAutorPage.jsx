@@ -3,11 +3,14 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent } from '@/components/ui/card';
+import { crearAutor } from '@/api/index';
 
 export default function RegistrarAutorPage() {
   const [authorName, setAuthorName] = useState('');
   const [imageUrl, setImageUrl] = useState('');
   const [previewUrl, setPreviewUrl] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const handleImageUrlChange = (e) => {
     const url = e.target.value;
@@ -15,14 +18,41 @@ export default function RegistrarAutorPage() {
     setPreviewUrl(url); // Actualiza la URL de vista previa directamente
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Registrar Autor:', { authorName, imageUrl });
-    // Aquí iría la lógica para enviar los datos a tu API/base de datos
-    alert(`Autor "${authorName}" registrado con imagen: ${imageUrl}`);
-    setAuthorName('');
-    setImageUrl('');
-    setPreviewUrl('');
+    setLoading(true);
+    setError('');
+    
+    try {
+      const autorData = {
+        nombre: authorName,
+        url_foto: imageUrl
+      };
+      
+      await crearAutor(autorData);
+      alert(`Autor "${authorName}" registrado exitosamente`);
+      
+      // Limpiar formulario
+      setAuthorName('');
+      setImageUrl('');
+      setPreviewUrl('');
+      
+      // Autor registrado exitosamente
+    } catch (err) {
+      console.error('Error al registrar autor:', err);
+      if (err.response) {
+        // El servidor respondió con un código de error
+        setError(`Error ${err.response.status}: ${err.response.data?.message || 'Error del servidor'}`);
+      } else if (err.request) {
+        // La petición se hizo pero no hubo respuesta
+        setError('No se pudo conectar con el servidor. Verifica tu conexión.');
+      } else {
+        // Algo más pasó
+        setError('Error al registrar el autor. Por favor, intenta nuevamente.');
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -68,11 +98,17 @@ export default function RegistrarAutorPage() {
                 <span className="text-masala-500 dark:text-masala-400">Vista previa</span>
               )}
             </div>
+            {error && (
+              <div className="text-red-600 text-sm text-center">
+                {error}
+              </div>
+            )}
             <Button
               type="submit"
-              className="w-full bg-masala-900 text-white hover:bg-masala-800 dark:bg-masala-700 dark:hover:bg-masala-600"
+              disabled={loading}
+              className="w-full bg-masala-900 text-white hover:bg-masala-800 dark:bg-masala-700 dark:hover:bg-masala-600 disabled:opacity-50"
             >
-              Registrar Autor
+              {loading ? 'Registrando...' : 'Registrar Autor'}
             </Button>
           </form>
         </CardContent>
