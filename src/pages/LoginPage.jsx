@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Eye, EyeOff } from 'lucide-react';
+import { login } from '@/api/index';
 
 export default function LoginPage({ onLoginSuccess }) {
   const [email, setEmail] = useState('');
@@ -11,19 +12,34 @@ export default function LoginPage({ onLoginSuccess }) {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
 
-    // Credenciales de ejemplo
-    const correctEmail = 'admin@123.com';
-    const correctPassword = '123abc12';
-
-    if (email === correctEmail && password === correctPassword) {
-      console.log('Inicio de sesión exitoso');
+    try {
+      const credentials = {
+        correo: email,
+        contrasena: password
+      };
+      
+      const response = await login(credentials);
+      console.log('Inicio de sesión exitoso:', response);
       onLoginSuccess(); // Llama a la función de éxito de login
-    } else {
-      setError('Correo o contraseña incorrectos.');
+    } catch (error) {
+      console.error('Error en login:', error);
+      
+      // Mostrar error más específico
+      if (error.response) {
+        // Error del servidor (4xx, 5xx)
+        const message = error.response.data?.message || 'Error del servidor';
+        setError(`Error: ${message}`);
+      } else if (error.request) {
+        // Error de red/conexión
+        setError('Error de conexión. Verifique su conexión a internet.');
+      } else {
+        // Otro tipo de error
+        setError('Error inesperado. Intente nuevamente.');
+      }
     }
   };
 

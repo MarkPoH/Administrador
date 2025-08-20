@@ -1,0 +1,1007 @@
+{
+	"info": {
+		"_postman_id": "8dd1cea8-9c8d-4652-81eb-a4f34d031afc",
+		"name": "Back Ecommerce",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30516780"
+	},
+	"item": [
+		{
+			"name": "Registros-POST",
+			"item": [
+				{
+					"name": "Registro",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Generar datos aleatorios",
+									"const randomNum = Math.floor(Math.random() * 10000);",
+									"const email = `user${randomNum}@example.com`;",
+									"const nombres = ['Jhosep', 'Maria', 'Carlos', 'Luisa', 'Pedro','Jhon','Alcalde','Denis'];",
+									"const nombreAleatorio = nombres[Math.floor(Math.random() * nombres.length)] + \" \" + nombres[Math.floor(Math.random() * nombres.length)];",
+									"pm.variables.set(\"nombre\", nombreAleatorio);",
+									"pm.variables.set(\"email\", email);",
+									"pm.variables.set(\"password\", \"12345678\");",
+									"pm.variables.set(\"tipoUsuario\", \"USER\");"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"nombre\": \"{{nombre}}\",\r\n  \"correo\": \"{{email}}\",\r\n  \"rol\": \"{{tipoUsuario}}\",\r\n  \"contrasena\": \"{{password}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/auth/registrar",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"auth",
+								"registrar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Iniciar Secion",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"correo\": \"user3502@example.com\",\n  \"contrasena\": \"12345678\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/auth/iniciar-sesion",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"auth",
+								"iniciar-sesion"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Crear categoria",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"categoria\": \"Obras\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://35.94.124.77:3000/categorias/registrar",
+							"protocol": "http",
+							"host": [
+								"35",
+								"94",
+								"124",
+								"77"
+							],
+							"port": "3000",
+							"path": [
+								"categorias",
+								"registrar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Crear Libro",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzUyMzg1MDU3LCJleHAiOjE3NTIzOTIyNTd9.xNjhkdWOOdKtFW2JWbLZbxKrYYucayuduMEHO0IZ2GE",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"isbn\":\"454205\",\n  \"titulo\":\"Libro de pruebas\",\n  \"descripcion\":\"este es un libro de prueba\",\n  \"precio\":\"23.89\",\n  \"url_portada\":\"ellees.h-cdn.co/assets/15/37/1024x1024/1024x1024-io-libros-portadas-bonitas-cuestion-de-supervivencia-12776329-1-esl-es-cuestion-de-supervivencia-jpg.jpg\",\n  \"url_libro\":\"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnjTLh2skZTZ24-mAvQ2VW6aOGP_Mvl7OMqA&s\",\n  \"id_categoria\":\"4\",\n  \"id_autor\" : \"1\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/libro/crear",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"libro",
+								"crear"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Registrar autor",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nombre\": \"Cesar vallejos\",\n    \"url_foto\": \"https://amhigo.com/images/amhiblog/expertos/Luis_Flores_/Foto_portada.jpg\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/autor/registrar",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"autor",
+								"registrar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Agregar favoritos",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiaWF0IjoxNzUyMzg2MDU3LCJleHAiOjE3NTIzOTMyNTd9.cPE9y0wHfp7-e77m2kTSSyTM_EfEiINH2TZW1dBstTg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id_usuario\":\"1\",\n   \"id_libro\":\"1\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/favoritos/agregar",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"favoritos",
+								"agregar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Comentar id-libro12/id-usuario3",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiaWF0IjoxNzUyNjE1NjA1LCJleHAiOjE3NTI2MjI4MDV9.-vNZyc_ZYpRUm42VndwxNOdJ3Fvjl-9pnnMo_NX9Gb8",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"comentario\":\"es un buen libro\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/comentarios/crear/12/3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"comentarios",
+								"crear",
+								"12",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Calificar libr",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiaWF0IjoxNzUyNDQ5NTI4LCJleHAiOjE3NTI0NTY3Mjh9.qsDgpgo_1dgAzd4SCwbF88vSqXsI7y2fqOkhwvU6_rU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"calificacion\":\"5\",\n    \"id_usuario\":\"4\",\n    \"id_libro\":\"12\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/resenas/calificar",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"resenas",
+								"calificar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Agregar libro carrito",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNzUzNTkyNDcwLCJleHAiOjE3NTM1OTk2NzB9.qq9Vd1HAJDGONnqVQLYtjcCX8ewcrFKJ_flqS0sAczA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id_libro\": 27\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/carrito/agregar/5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"carrito",
+								"agregar",
+								"5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "LIbro crear Local",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "isbn",
+									"value": "15407",
+									"type": "text"
+								},
+								{
+									"key": "titulo",
+									"value": "Libro de fantasias",
+									"type": "text"
+								},
+								{
+									"key": "descripcion",
+									"value": "este es un libro de fantasias",
+									"type": "text"
+								},
+								{
+									"key": "precio",
+									"value": "35",
+									"type": "text"
+								},
+								{
+									"key": "url_portada",
+									"type": "file",
+									"src": "/home/linux-ubuntu/Imágenes/Capturas de pantalla/Captura desde 2025-07-17 18-51-31.png"
+								},
+								{
+									"key": "url_libro",
+									"type": "file",
+									"src": "/home/linux-ubuntu/Descargas/Letras vivas_GRUPO01.pdf"
+								},
+								{
+									"key": "id_categoria",
+									"value": "4",
+									"type": "text"
+								},
+								{
+									"key": "id_autor",
+									"value": "1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3000/libro/crear",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"libro",
+								"crear"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Consultas -GET",
+			"item": [
+				{
+					"name": "listar favoritos ID usuario",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiaWF0IjoxNzUyMzkzNTk4LCJleHAiOjE3NTI0MDA3OTh9.8qNkSybg2s_L0-qlMu3mV69NtqKhIYRLFNcgZgl95gU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://35.94.124.77:3000/favoritos/listar/2",
+							"protocol": "http",
+							"host": [
+								"35",
+								"94",
+								"124",
+								"77"
+							],
+							"port": "3000",
+							"path": [
+								"favoritos",
+								"listar",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar Categorias",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://35.94.124.77:3000/categorias/listar",
+							"protocol": "http",
+							"host": [
+								"35",
+								"94",
+								"124",
+								"77"
+							],
+							"port": "3000",
+							"path": [
+								"categorias",
+								"listar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Consulta categoria Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/categorias/4",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"categorias",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar libros",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"isbn\":\"1234436\",\n  \"titulo\":\"Las aves sin nido \",\n  \"descripcion\":\"este es un libro de prueba\",\n  \"precio\":\"29.90\",\n  \"url_portada\":\"https://ellees.h-cdn.co/assets/15/37/1024x1024/1024x1024-io-libros-portadas-bonitas-cuestion-de-supervivencia-12776329-1-esl-es-cuestion-de-supervivencia-jpg.jpg\",\n  \"url_libro\":\"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnjTLh2skZTZ24-mAvQ2VW6aOGP_Mvl7OMqA&s\",\n  \"id_categoria\":\"1\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/libro/listar",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"libro",
+								"listar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar autores",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/autor/listar",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"autor",
+								"listar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Consultar libro por id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/libro/7",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"libro",
+								"7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Catalogo completo",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"categoria\": \"Terror\"\r\n}"
+						},
+						"url": {
+							"raw": "http://35.94.124.77:3000/libro/catalogo/completo",
+							"protocol": "http",
+							"host": [
+								"35",
+								"94",
+								"124",
+								"77"
+							],
+							"port": "3000",
+							"path": [
+								"libro",
+								"catalogo",
+								"completo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "obtener autor individual{idautor}",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzUyMzg1MDU3LCJleHAiOjE3NTIzOTIyNTd9.xNjhkdWOOdKtFW2JWbLZbxKrYYucayuduMEHO0IZ2GE",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"isbn\":\"1244459756\",\n  \"titulo\":\"Libro de pruebas\",\n  \"descripcion\":\"este es un libro de prueba\",\n  \"precio\":\"23.89\",\n  \"url_portada\":\"ellees.h-cdn.co/assets/15/37/1024x1024/1024x1024-io-libros-portadas-bonitas-cuestion-de-supervivencia-12776329-1-esl-es-cuestion-de-supervivencia-jpg.jpg\",\n  \"url_libro\":\"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnjTLh2skZTZ24-mAvQ2VW6aOGP_Mvl7OMqA&s\",\n  \"id_categoria\":\"4\",\n  \"id_autor\" : \"1\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/autor/obtener/individual/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"autor",
+								"obtener",
+								"individual",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "LIstar carrito compras",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiaWF0IjoxNzUzNTkzMTEwLCJleHAiOjE3NTM2MDAzMTB9.Hq3T-G4Ic63UKRztyXGAFz5oiYTA99kf-Lw5xOeEQ-o",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/carrito/listar/4",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"carrito",
+								"listar",
+								"4"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Actualizar -PUT",
+			"item": [
+				{
+					"name": "Update User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJKdWFuIFBlcmV6IiwiaWF0IjoxNzM2MDY0NTA0LCJleHAiOjE3MzYwNjU5NDR9.v3dL8SVdJp7eVaf_Cl4_ntWlny29q1nkFsKgw6aUPKQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXJpYUBnbWFpbC5jb20iLCJpYXQiOjE3MzM4MDcxNTMsImV4cCI6MTczMzg0MzE1M30.MD1bR31N2K7QbvZP2Svogg5jQQDZSjmqn9IO_3gMM5A",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"Acutal Lopez\",\r\n    \"lastname\": \"Nuevoido\",\r\n    \"password\" :\"perez12\",\r\n    \"email\": \"devz@gmail.com\",\r\n    \"phone\": \"768658432\",\r\n    \"gender\": \"Masculino\",\r\n    \"dni\":\"75328735\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/update/30",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"update",
+								"30"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar categoria Id",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n     \"categoria\": \"Comics\"\n\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/categorias/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"categorias",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar librro con id",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"isbn\": \"987654321\",\n    \"titulo\": \"Libro de pruebas actualizado\",\n    \"descripcion\": \"este es un libro de prueba\",\n    \"precio\": \"29.90\",\n    \"url_portada\": \"https://ellees.h-cdn.co/assets/15/37/1024x1024/1024x1024-io-libros-portadas-bonitas-cuestion-de-supervivencia-12776329-1-esl-es-cuestion-de-supervivencia-jpg.jpg\",\n    \"url_libro\": \"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnjTLh2skZTZ24-mAvQ2VW6aOGP_Mvl7OMqA&s\",\n    \"id_categoria\": 6,\n    \"id_autor\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/libro/8",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"libro",
+								"8"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "actualizar autor{idautor}",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nombre\": \"Jhosep Saucedo Huerta\",\n    \"url_foto\": \"https://amhigo.comimagesamhiblogexpertosLuis_FloreFoto_portada.jpg\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/autor/actualizar/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"autor",
+								"actualizar",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Eliminar",
+			"item": [
+				{
+					"name": "Eliminar categoria",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/categorias/3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"categorias",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "eliminar libro",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/libro/8",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"libro",
+								"8"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "eliminar favoritos con ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiaWF0IjoxNzUyMzk4NTk0LCJleHAiOjE3NTI0MDU3OTR9.FMDjR7affV0HjjP5GGPbMxIWTsTZankoeEk1UeQmdXw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/favoritos/eliminar/11",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"favoritos",
+								"eliminar",
+								"11"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "eliminar autor {idautor}",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/autor/eliminar/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"autor",
+								"eliminar",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Vaciar carrito",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiaWF0IjoxNzUzNTkzMTEwLCJleHAiOjE3NTM2MDAzMTB9.Hq3T-G4Ic63UKRztyXGAFz5oiYTA99kf-Lw5xOeEQ-o",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/carrito/vaciar/4",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"carrito",
+								"vaciar",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar libro :id_usuairo/id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiaWF0IjoxNzUzNTkzMTEwLCJleHAiOjE3NTM2MDAzMTB9.Hq3T-G4Ic63UKRztyXGAFz5oiYTA99kf-Lw5xOeEQ-o",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/carrito/eliminar/4/4",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"carrito",
+								"eliminar",
+								"4",
+								"4"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
